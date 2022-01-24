@@ -31,38 +31,81 @@ class CourseServiceTest {
     @InjectMocks
     private CourseService courseService;
 
+    private static final Long ID = 1L;
+
     @Test
     void shouldSaveCourseSuccessfully() {
-        Course course = getTestCourse();
+        Course testCourse = getTestCourse();
 
-        when(courseRepository.save(course)).thenReturn(course);
-        assertEquals(course, courseService.save(course));
+        when(courseRepository.save(testCourse)).thenReturn(testCourse);
+        assertEquals(testCourse, courseService.save(testCourse));
+    }
+
+    @Test
+    void shouldFindCourseById(){
+        Course testCourse = getTestCourse();
+
+        when(courseRepository.findCourseById(ID)).thenReturn(testCourse);
+        Course actualCourse = courseService.findCourseById(ID);
+
+        verify(courseRepository).findCourseById(ID);
+        assertEquals(courseRepository.findCourseById(ID), actualCourse);
     }
 
     @Test
     void shouldGetAllCoursesSuccessfully() {
-        List<Course> testCourses = getTestCourses();
+        List<Course> allTestCourses = new ArrayList<>();
+        allTestCourses.add(new Course(1L,"Java","Java for beginners","Three weeks"));
+        allTestCourses.add(new Course(2L,"Kotlin","Kotlin for beginners","Two weeks"));
 
-        when(courseRepository.findAll()).thenReturn(testCourses);
+        when(courseRepository.findAll()).thenReturn(allTestCourses);
         assertEquals(2, courseService.findAll().size());
     }
 
     @Test
     void shouldDeleteCourseById() {
         Course testCourse = getTestCourse();
-        courseService.deleteById(testCourse.getId());
 
+        when(courseRepository.save(testCourse)).thenReturn(testCourse);
+
+        Course actualCourse = courseService.save(testCourse);
+        assertEquals(testCourse.getId(), actualCourse.getId());
+
+        courseService.deleteById(ID);
         verify(courseRepository,times(1)).deleteById(testCourse.getId());
     }
 
-    private Course getTestCourse() {
-        return new Course(1L,"Java","Java for beginners","Three weeks");
+    @Test
+    void shouldUpdateCourseSuccessfully() {
+        Course testCourse = getTestCourse();
+
+        when(courseRepository.findCourseById(ID)).thenReturn(testCourse);
+        when(courseService.findAll()).thenReturn(List.of(testCourse));
+
+        Course updatedCourse = new Course();
+        updatedCourse.setId(ID);
+        updatedCourse.setCourseId("updatedCourseId");
+        updatedCourse.setCourseTitle("UpdatedCourseTitle");
+        updatedCourse.setDuration("updatedDuration");
+
+        courseService.updateCourse(updatedCourse);
+
+        List<Course> actual = courseService.findAll();
+        Course actualCourse = actual.get(0);
+
+        assertEquals(ID, actualCourse.getId());
+        assertEquals(testCourse.getCourseId(), actualCourse.getCourseId());
+        assertEquals(testCourse.getCourseTitle(), actualCourse.getCourseTitle());
+        assertEquals(testCourse.getDuration(), actualCourse.getDuration());
     }
 
-    private List<Course> getTestCourses() {
-        List<Course> allCourses = new ArrayList<>();
-        allCourses.add(new Course(1L,"Java","Java for beginners","Three weeks"));
-        allCourses.add(new Course(2L,"Kotlin","Kotlin for beginners","Two weeks"));
-        return allCourses;
+    private Course getTestCourse() {
+        Course course = new Course();
+        course.setId(ID);
+        course.setCourseId("courseId");
+        course.setCourseTitle("courseTitle");
+        course.setDuration("duration");
+
+        return course;
     }
 }

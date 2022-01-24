@@ -25,8 +25,8 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public Course getCourseById(Long id) {
-        return courseRepository.getCourseById(id);
+    public Course findCourseById(Long id) {
+        return courseRepository.findCourseById(id);
     }
 
     public List<Course> findAll() {
@@ -39,7 +39,7 @@ public class CourseService {
     }
 
     public Course updateCourse(Course course) {
-        Course updateCourse = courseRepository.getCourseById(course.getId());
+        Course updateCourse = courseRepository.findCourseById(course.getId());
         updateCourse.setCourseId(course.getCourseId());
         updateCourse.setCourseTitle(course.getCourseTitle());
         updateCourse.setDuration(course.getDuration());

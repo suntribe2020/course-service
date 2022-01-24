@@ -2,11 +2,8 @@ package com.example.courseservice.repository;
 
 import com.example.courseservice.entity.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by Katri Vidén
@@ -18,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    Course getCourseById(Long id);
+    Course findCourseById(Long id);
 
     @Transactional
     void deleteById(Long id);
