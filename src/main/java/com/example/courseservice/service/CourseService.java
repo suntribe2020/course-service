@@ -40,9 +40,17 @@ public class CourseService {
 
     public Course updateCourse(Course course) {
         Course updateCourse = courseRepository.findCourseById(course.getId());
-        updateCourse.setCourseId(course.getCourseId());
-        updateCourse.setCourseTitle(course.getCourseTitle());
-        updateCourse.setDuration(course.getDuration());
+        if (course.isCourseId()) {
+            updateCourse.setCourseId(course.getCourseId());
+        }
+
+        if (course.isCourseTitle()) {
+            updateCourse.setCourseTitle(course.getCourseTitle());
+        }
+
+        if (course.isDuration()) {
+            updateCourse.setDuration(course.getDuration());
+        }
         courseRepository.save(updateCourse);
 
         return updateCourse;

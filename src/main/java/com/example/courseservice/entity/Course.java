@@ -31,4 +31,16 @@ public class Course {
     private String courseId;
     private String courseTitle;
     private String duration;
+
+    public boolean isCourseId() {
+        return courseId != null;
+    }
+
+    public boolean isCourseTitle() {
+        return courseTitle != null;
+    }
+
+    public boolean isDuration() {
+        return duration != null;
+    }
 }
